@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Girassol</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #ffec77;
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+        color: #504120;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #504120;
+        font-size: 1.2rem;
+    }
+
+    nav a:hover {
+        color: #d3a110;
+        transition: 0.3s;
+    }
+
+    section {
+        padding: 40px;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    footer {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #ffbd00;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #ff9900;
+    }
+
+    #gameArea {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        border: 2px solid #ffbd00;
+        background: linear-gradient(to bottom right, #7bb46a, #d2f0a2);
+        margin-top: 20px;
+        overflow: hidden;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .not_hidden {
+        display: flex;
+    }
+
+    .girassol {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-image: url('girassol.png');
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    .girassol:active {
+        transform: scale(0.5);
+        transition: 0.2s;
+    }
+
+    .victory-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: #ffec77;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        font-size: 1.5rem;
+        text-align: center;
+        color: #504120;
+        display: none;
+    }
+
+    .victory-box.active {
+        display: block;
+    }
+
+    .victory-box button {
+        margin-top: 10px;
+        background-color: #ffbd00;
+        border: none;
+        padding: 10px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .victory-box button:hover {
+        background-color: #ff9900;
+    }
+
+    @media (max-width: 600px) {
+        header {
+            flex-direction: column;
+        }
+        nav ul {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    #loading-screen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #fffbe6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        font-family: 'Arial', sans-serif;
+        color: #504120;
+    }
+
+    .loading-box {
+        text-align: center;
+    }
+
+    .progress-bar {
+        width: 300px;
+        height: 15px;
+        background: #ffec77;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 20px auto;
+    }
+
+    #progress {
+        width: 0%;
+        height: 100%;
+        background: #ffbd00;
+        transition: width 0.1s;
+    }
+
+    #percent {
+        font-size: 1.2rem;
+        color: #504120;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s;
+    }
+</style>
+<body>
+
+    <div id="loading-screen">
+    <div class="loading-box">
+        <h2>Carregando...</h2>
+        <p id="loading-text">✨ Espalhando luz...</p>
+        <div class="progress-bar">
+            <div id="progress"></div>
+        </div>
+        <span id="percent">0%</span>
+    </div>
+</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const frases = [
+                "🌻 Regando girassóis...",
+                "💛 Pintando o céu de amarelo...",
+                "🎵 Ajustando o tom perfeito...",
+                "🧡 Preparando algo especial...",
+                "🌞 Brilhando só pra você..."
+            ];
+            const texto = document.getElementById("loading-text");
+            const percent = document.getElementById("percent");
+            const progress = document.getElementById("progress");
+            const tela = document.getElementById("loading-screen");
+            
+            let progresso = 0;
+            let fraseAtual = 0;
+            
+            const intervalo = setInterval(() => {
+                progresso += Math.floor(Math.random() * 5) + 1;
+                if (progresso > 100) progresso = 100;
+                progress.style.width = progresso + "%";
+                percent.textContent = progresso + "%";
+                
+                if (progresso % 10 === 0 && fraseAtual < frases.length) {
+                    texto.textContent = frases[fraseAtual];
+                    fraseAtual++;
+                }
+                
+                if (progresso === 100) {
+                    clearInterval(intervalo);
+                    setTimeout(() => {
+                        tela.classList.add("fade-out");
+                        setTimeout(() => tela.remove(), 1000);
+                    }, 500);
+                }
+            }, 200);
+        });
+    </script>
+
+    <!-- Cabeçalho -->
+    <header>
+        <div class="logo">
+            <h1>Minha Girassol</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="musica1.html">Minha Girassol</a></li>
+                <li><a href="musica2.html">AmarELA</a></li>
+                <li><a href="cartinha.html">Cartinha</a></li>
+                <li><a href="curiosidades.html">Curiosidades</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Jogo -->
+    <section id="jogo">
+        <h2>Joguinho dos Girassóis</h2>
+        <div class="jogo-container">
+            <button onclick="startGame()">Iniciar Jogo</button>
+            <div class="hidden" id="gameArea"></div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>Feito com muito carinho. <span id="girassol-secreto" style="cursor: pointer;">🌻</span></p>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+        function startGame() {
+            const gameArea = document.getElementById('gameArea');
+            gameArea.classList.remove('hidden');
+            gameArea.classList.add('not_hidden');
+            gameArea.innerHTML = ''; // Limpa o jogo anterior
+
+            // Criar girassóis aleatórios
+            for (let i = 0; i < 10; i++) {
+                const girassol = document.createElement('div');
+                girassol.classList.add('girassol');
+                girassol.style.left = `${Math.random() * 90}%`;
+                girassol.style.top = `${Math.random() * 90}%`;
+
+                girassol.onclick = function() {
+                    girassol.remove(); // Remove o girassol quando clicado
+
+                    // Verifica se todos os girassóis foram coletados
+                    if (gameArea.children.length === 0) {
+                        showVictoryBox(); // Exibe a caixa de vitória
+                    }
+                };
+
+                gameArea.appendChild(girassol);
+            }
+        }
+
+        function showVictoryBox() {
+            // Exibe a caixa de vitória
+            const victoryBox = document.createElement('div');
+            victoryBox.classList.add('victory-box');
+            victoryBox.innerHTML = `
+                <p>Você coletou todos os girassóis<br>agora eles são todos seus, assim com meu coração! 🌻💛</p>
+                <button onclick="restartGame()">Jogar Novamente</button>
+                <button onclick="exitGame()">Sair</button>
+            `;
+            document.body.appendChild(victoryBox);
+
+            // Torna a caixa visível
+            setTimeout(() => {
+                victoryBox.classList.add('active');
+            }, 100);
+        }
+
+        function exitGame() {
+            // Limpa a caixa de vitória e reinicia o jogo
+            const victoryBox = document.querySelector('.victory-box');
+            if (victoryBox) {
+                victoryBox.remove();
+            }
+            gameArea.classList.remove('not_hidden');
+            gameArea.classList.add('hidden');
+        }
+
+        function restartGame() {
+            // Limpa a caixa de vitória e reinicia o jogo
+            const victoryBox = document.querySelector('.victory-box');
+            if (victoryBox) {
+                victoryBox.remove();
+            }
+            startGame(); // Chama o jogo novamente
+        }
+    </script>
+</body>
+</html>

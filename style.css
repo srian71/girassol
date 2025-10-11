@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffec77;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #504120;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #504120;
+    font-size: 1.2rem;
+}
+
+nav a:hover {
+    color: #d3a110;
+    transition: 0.3s;
+}
+
+section {
+    padding: 40px;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+audio {
+    border: 2px solid #ffec77;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.cartinha {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fffbe6;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+    border: 2px dashed #ffbd00;
+    margin-top: 20px;
+}
+
+.cartinha p {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+#curiosidades {
+  padding: 40px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+#curiosidades h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #ffbd00;
+}
+
+.curiosidade {
+  background-color: #fffbe6;
+  border: 2px solid #ffec77;
+  border-radius: 15px;
+  padding: 20px 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.curiosidade h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #504120;
+}
+
+.curiosidade p{
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+footer {
+    margin-top: 40px;
+    font-size: 1rem;
+}
+
+footer p {
+    color: #000000;
+}
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

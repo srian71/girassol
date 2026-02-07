@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,7 @@
 
     body {
         font-family: 'Arial', sans-serif;
-        background-color: #f4f4f9;
+        background-color: #fffbe6;
         color: #333;
     }
 
@@ -145,6 +146,7 @@
         header {
             flex-direction: column;
         }
+
         nav ul {
             flex-direction: column;
             gap: 10px;
@@ -153,7 +155,8 @@
 
     #loading-screen {
         position: fixed;
-        top: 0; left: 0;
+        top: 0;
+        left: 0;
         width: 100vw;
         height: 100vh;
         background-color: #fffbe6;
@@ -195,19 +198,109 @@
         opacity: 0;
         transition: opacity 1s;
     }
+
+    /* Estilização do item da lista (li) */
+    .especial {
+        list-style: none;
+        display: inline-block;
+        margin-left: 15px;
+        vertical-align: middle;
+    }
+
+    /* Estilização do link (botão) */
+    .especial a {
+        position: relative;
+        display: inline-block;
+        padding: 10px 25px;
+        background: #ff0055;
+        /* Fundo Rosa Vibrante */
+        color: white !important;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        overflow: hidden;
+        /* Necessário para o efeito de brilho não sair do botão */
+        transition: transform 0.3s;
+
+        /* Borda Arco-íris */
+        border: 3px solid transparent;
+        background-image: linear-gradient(#ff0055, #ff0055),
+            linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+
+        /* Sombra de brilho */
+        box-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
+        animation: pulsar 2s infinite;
+    }
+
+    /* Efeito de Brilho (Glitter/Reflexo) que passa pelo botão */
+    .especial a::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -100%;
+        width: 50%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.4);
+        transform: rotate(30deg);
+        transition: none;
+        animation: brilhoPassante 3s infinite;
+    }
+
+    /* Animação para o botão pulsar levemente */
+    @keyframes pulsar {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+        }
+
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.8), 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+        }
+    }
+
+    /* Animação do brilho cruzando o botão */
+    @keyframes brilhoPassante {
+        0% {
+            left: -100%;
+        }
+
+        20% {
+            left: 150%;
+        }
+
+        100% {
+            left: 150%;
+        }
+    }
+
+    /* Efeito de hover (passar o mouse) */
+    .especial a:hover {
+        transform: scale(1.1) rotate(-2deg);
+        filter: brightness(1.2);
+    }
 </style>
+
 <body>
 
     <div id="loading-screen">
-    <div class="loading-box">
-        <h2>Carregando...</h2>
-        <p id="loading-text">✨ Espalhando luz...</p>
-        <div class="progress-bar">
-            <div id="progress"></div>
+        <div class="loading-box">
+            <h2>Carregando...</h2>
+            <p id="loading-text">✨ Espalhando luz...</p>
+            <div class="progress-bar">
+                <div id="progress"></div>
+            </div>
+            <span id="percent">0%</span>
         </div>
-        <span id="percent">0%</span>
     </div>
-</div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -222,21 +315,21 @@
             const percent = document.getElementById("percent");
             const progress = document.getElementById("progress");
             const tela = document.getElementById("loading-screen");
-            
+
             let progresso = 0;
             let fraseAtual = 0;
-            
+
             const intervalo = setInterval(() => {
                 progresso += Math.floor(Math.random() * 5) + 1;
                 if (progresso > 100) progresso = 100;
                 progress.style.width = progresso + "%";
                 percent.textContent = progresso + "%";
-                
+
                 if (progresso % 10 === 0 && fraseAtual < frases.length) {
                     texto.textContent = frases[fraseAtual];
                     fraseAtual++;
                 }
-                
+
                 if (progresso === 100) {
                     clearInterval(intervalo);
                     setTimeout(() => {
@@ -254,7 +347,7 @@
             <h1>Minha Girassol</h1>
         </div>
         <nav>
-            <ul>
+            <ul id="menu">
                 <li><a href="minha_girassol.html">Minha Girassol</a></li>
                 <li><a href="amarela.html">AmarELA</a></li>
                 <li><a href="cartinha.html">Cartinha</a></li>
@@ -293,7 +386,7 @@
                 girassol.style.left = `${Math.random() * 90}%`;
                 girassol.style.top = `${Math.random() * 90}%`;
 
-                girassol.onclick = function() {
+                girassol.onclick = function () {
                     girassol.remove(); // Remove o girassol quando clicado
 
                     // Verifica se todos os girassóis foram coletados
@@ -345,5 +438,3 @@
 </body>
 
 </html>
-
-

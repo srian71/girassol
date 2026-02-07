@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uma Surpresa...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* CSS ESPECÍFICO PARA A ANIMAÇÃO */
+        body {
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        #container-surpresa {
+            position: relative;
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        /* --- ESTILO DA CAIXA --- */
+        .box-wrapper {
+            position: absolute;
+            z-index: 10;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .box {
+            width: 200px; /* Aumentado de 150px */
+            height: 160px; /* Aumentado de 120px */
+            background: #ff0055;
+            border: 2px solid #d3105b;
+            border-radius: 0 0 10px 10px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Texto na Caixa */
+        .box-text {
+            color: black;
+            background-color: white;
+            padding: 5px 5px;
+            border-radius: 10px 10px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            z-index: 2; /* Fica em cima da fita */
+            text-align: center;
+            pointer-events: none; /* O clique passa para a caixa */
+            /*text-shadow: 1px 1px 2px rgba(0,0,0,0.3);*/
+        }
+
+        .box::after {
+            /* Fita */
+            content: '';
+            position: absolute;
+            width: 30px; /* Aumentado levemente */
+            height: 100%;
+            background: #ff7789;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 1px solid #d31041;
+            border-right: 1px solid #d31041;
+            z-index: 1;
+        }
+
+        .lid {
+            width: 220px; /* Aumentado para cobrir a nova largura */
+            height: 45px; /* Aumentado levemente */
+            background: #ff0055;
+            border: 2px solid #d3105b;
+            position: absolute;
+            bottom: 158px; /* Ajustado para a nova altura da caixa */
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            z-index: 11;
+            transition: transform 0.5s;
+        }
+
+        /* --- ESTILO DO ENVELOPE --- */
+        #envelope-wrapper {
+            position: absolute;
+            display: none;
+            z-index: 20;
+            cursor: pointer;
+            transition: opacity 0.5s;
+        }
+
+        .envelope {
+            width: 200px;
+            height: 150px;
+            background: #fdfdfd;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        .envelope-flap {
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-top: 75px solid #dfdfdf;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transition: 0.5s;
+            z-index: 21;
+        }
+
+        /* --- ESTILO DO PAPEL (CARTA) --- */
+        #paper {
+            position: absolute;
+            display: none;
+            width: 500px;
+            padding: 30px;
+            z-index: 30;
+            transform: scale(0.5);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* --- ANIMAÇÕES E AUXILIARES --- */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+
+        .shaking { animation: shake 0.4s; }
+        .oculto { opacity: 0; pointer-events: none; }
+        .visivel { display: block !important; opacity: 1 !important; }
+        .expandir-papel { display: block !important; transform: scale(1) !important; opacity: 1 !important; }
+
+        #click-hint {
+            color: #ffbd00;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.5s;
+        }
+    </style>
+</head>
+
+<body onclick="resetarTudo()">
+
+    <header>
+        <div class="logo">
+            <h1>Minha Girassol</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Voltar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="container-surpresa">
+        <div class="box-wrapper" id="box-wrapper" onclick="interagirCaixa(event)">
+            <div class="lid" id="lid"></div>
+            <div class="box">
+                <span class="box-text">TROCA <br> DE <br> AFETOS</span>
+            </div>
+        </div>
+
+        <div id="envelope-wrapper" onclick="interagirEnvelope(event)">
+            <div class="envelope-flap" id="flap"></div>
+            <div class="envelope"></div>
+        </div>
+
+        <div class="cartinha" id="paper" onclick="event.stopPropagation()">
+            <p style="font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: #504120;">
+                🌻<br>
+                Essa carta é um presente especial, feito pra você.<br>
+                A DT pediu pra fazermos cartas, mas não tinha outra forma de te entregar isso, então...<br>
+                Saiba que estarei sempre aqui pra quando você precisar, mesmo que não esteja ao meu lado, eu sempre vou
+                te amar.<br>
+                Queria poder curtir esse dia pessoalmente com você.<br><br>
+                <strong>Feliz dia dos namorados!</strong>
+            </p>
+        </div>
+    </div>
+
+    <p id="click-hint" style="opacity: 0;">Toque no envelope...</p>
+
+    <script>
+        let clicksNoEnvelope = 0;
+        let fase = "caixa"; 
+
+        function interagirCaixa(e) {
+            e.stopPropagation();
+            if (fase !== "caixa") return;
+
+            const hoje = new Date();
+            const dia = hoje.getDate();
+            const mes = hoje.getMonth() + 1;
+
+            // Para testar, mude para 'true' ou mantenha a lógica de data
+            const dataValida = (dia === 14 && mes === 2) || (dia === 12 && mes === 6);
+
+            if (dataValida) {
+                document.getElementById('lid').style.transform = "translateX(-110%) translateY(-50px) rotate(-20deg)";
+
+                setTimeout(() => {
+                    document.getElementById('box-wrapper').classList.add('oculto');
+                    document.getElementById('envelope-wrapper').classList.add('visivel');
+                    document.getElementById('click-hint').style.opacity = "1";
+                    fase = "envelope";
+                }, 600);
+            } else {
+                const bw = document.getElementById('box-wrapper');
+                bw.classList.add('shaking');
+                setTimeout(() => bw.classList.remove('shaking'), 400);
+                no_mensasse("Opa, ainda não é o dia, aguarde!");
+            }
+            
+            function no_mensasse(texto) {
+                const mensagem = document.createElement('div');
+                mensagem.innerText = texto;
+                mensagem.style.position = 'fixed';
+                mensagem.style.top = '50%';
+                mensagem.style.left = '50%';
+                mensagem.style.transform = 'translate(-50%, -50%)';
+                mensagem.style.backgroundColor = '#fffbe6';
+                mensagem.style.border = '2px solid #ffcc00';
+                mensagem.style.padding = '20px 30px';
+                mensagem.style.borderRadius = '15px';
+                mensagem.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.2)';
+                mensagem.style.fontSize = '1.2rem';
+                mensagem.style.zIndex = '1000';
+                mensagem.style.transition = 'opacity 0.5s';
+                mensagem.style.opacity = '0';
+
+                document.body.appendChild(mensagem);
+
+                setTimeout(() => mensagem.style.opacity = '1', 50);
+                setTimeout(() => {
+                    mensagem.style.opacity = '0';
+                    setTimeout(() => mensagem.remove(), 500);
+                }, 4000);
+            }
+        }
+
+        function interagirEnvelope(e) {
+            e.stopPropagation();
+            if (fase !== "envelope") return;
+
+            clicksNoEnvelope++;
+            const env = document.getElementById('envelope-wrapper');
+            env.style.transform = "scale(1.1)";
+            setTimeout(() => env.style.transform = "scale(1)", 100);
+
+            const hint = document.getElementById('click-hint');
+            if (clicksNoEnvelope === 1) hint.innerText = "Mais um pouco... ❤️";
+            if (clicksNoEnvelope === 2) hint.innerText = "Quase lá... 🌻";
+
+            if (clicksNoEnvelope >= 3) {
+                document.getElementById('flap').style.transform = "rotateX(180deg)";
+
+                setTimeout(() => {
+                    document.getElementById('envelope-wrapper').classList.add('oculto');
+                    document.getElementById('paper').classList.add('expandir-papel');
+                    hint.style.opacity = "0";
+                    fase = "papel";
+                }, 600);
+            }
+        }
+
+        function resetarTudo() {
+            if (fase === "papel") {
+                document.getElementById('paper').classList.remove('expandir-papel');
+
+                setTimeout(() => {
+                    fase = "caixa";
+                    clicksNoEnvelope = 0;
+                    document.getElementById('click-hint').innerText = "Toque no envelope...";
+                    document.getElementById('box-wrapper').classList.remove('oculto');
+                    document.getElementById('lid').style.transform = "translateX(-50%)"; 
+                    document.getElementById('envelope-wrapper').classList.remove('visivel', 'oculto');
+                    document.getElementById('flap').style.transform = "rotateX(0deg)";
+                }, 500);
+            }
+        }
+    </script>
+
+    <footer>
+        <p>Feito com muito carinho. <span id="girassol-secreto" style="cursor: pointer;">🌻</span></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

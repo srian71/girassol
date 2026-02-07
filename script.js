@@ -50,3 +50,15 @@ function mostrarMensagemSecreta(texto) {
         setTimeout(() => mensagem.remove(), 500);
     }, 4000);
 }
+
+const hoje = new Date();
+            const dia = hoje.getDate();
+            const mes = hoje.getMonth() + 1;
+
+            // Para testar, mude para 'true' ou mantenha a lógica de data
+            const dataValida = (dia === 14 && mes === 2) || (dia === 12 && mes === 6);
+
+            // Adicionar secreto ao menu
+            if (dataValida) {
+                document.getElementById('menu').innerHTML += '<li class="especial"><a href="secredo.html">Surpresa</a></li>';
+            }

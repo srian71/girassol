@@ -60,5 +60,6 @@ const hoje = new Date();
 
             // Adicionar secreto ao menu
             if (dataValida) {
-                document.getElementById('menu').innerHTML += '<li class="especial"><a href="secredo.html">Surpresa</a></li>';
+                document.getElementById('menu').innerHTML += '<li class="especial"><a href="secreto.html">Surpresa</a></li>';
             }
+
